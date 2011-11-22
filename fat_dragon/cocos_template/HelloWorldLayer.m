@@ -12,11 +12,14 @@
 //allow for touch control
 #import "CCTouchDispatcher.h"
 
+static double game_time=0;
+
 CCSprite *image_1;
 CCSprite *image_2;
 CCSprite *image_3;
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
+
 
 +(CCScene *) scene
 {
@@ -54,6 +57,7 @@ CCSprite *image_3;
         [self schedule:@selector(callEveryFrame:)];
         //register this view to respond touches(just make the picture respond)   gay joke as the tutorial said lol
         [[CCTouchDispatcher sharedDispatcher]addTargetedDelegate:self priority:0 swallowsTouches:YES];
+        
 	}
 	return self;
 }
@@ -75,14 +79,13 @@ CCSprite *image_3;
 }
 - (void) foodAnimation1: (ccTime)dt
 {
-    static double time=0;
-    time+=(arc4random()%5)*dt;
-    image_1.position=ccp(image_1.position.x+5*sin(time), image_1.position.y-time*time/20);
-    image_2.position=ccp(image_2.position.x+5*sin(time), image_2.position.y-time*time/40);
+    game_time+=(arc4random()%5)*dt;
+    image_1.position=ccp(image_1.position.x+5*sin(game_time), image_1.position.y*0.9);
+    image_2.position=ccp(image_2.position.x+5*sin(game_time), image_2.position.y*0.9);
     if (image_1.position.y<0&&image_2.position.y<0) {
         image_1.position=ccp(100+arc4random()%100, 349);
         image_2.position=ccp(100+arc4random()%100, 349);
-        time=0;
+        game_time=0;
     }
 }
 //needed for any touch to begin touch
@@ -96,7 +99,6 @@ CCSprite *image_3;
     //take the position you touch
     CGPoint location=[self convertTouchToNodeSpace:touch];
     if (location.x<(image_1.position.x+50)&&location.x>(image_1.position.x-50)&&location.y<(image_1.position.y+50)&&location.y>(image_1.position.y-50)) {
-        [image_1 stopAllActions];
         image_1.position = location;
     }
     [self checkCollision];
