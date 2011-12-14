@@ -2068,7 +2068,7 @@
 			</dict>
 		</dict>
 		<string>file://localhost/Developer/NovoProj1/box2dtutorial/box2dtutorial.xcodeproj/</string>
-		<real>345265548.52605301</real>
+		<real>345266652.34510797</real>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -3699,7 +3699,7 @@
 				<integer>338</integer>
 			</dict>
 		</dict>
-		<real>345265548.52487099</real>
+		<real>345266652.344392</real>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -4304,7 +4304,7 @@
 				<integer>399</integer>
 			</dict>
 			<key>NS.time</key>
-			<real>345265484.74129599</real>
+			<real>345266636.01576298</real>
 		</dict>
 		<dict>
 			<key>$classes</key>
@@ -4315,7 +4315,7 @@
 			<key>$classname</key>
 			<string>NSDate</string>
 		</dict>
-		<string>Today at 9:04 PM</string>
+		<string>Today at 9:23 PM</string>
 		<integer>234</integer>
 		<dict>
 			<key>$class</key>
