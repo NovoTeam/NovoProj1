@@ -159,8 +159,8 @@
 		DE79DC921491AD5200913262 /* MainMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE79DC911491AD5200913262 /* MainMenu.mm */; };
 		DE79DC951491AD5200913262 /* GLES-Render.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE79DC941491AD5200913262 /* GLES-Render.mm */; };
 		DE79DC981491AD5200913262 /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = DE79DC971491AD5200913262 /* blocks.png */; };
-		DE79DC9F1491AE8D00913262 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = DE79DC9E1491AE8D00913262 /* menu.png */; };
-		DE79DE221491B85700913262 /* Scene2.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE79DE211491B85600913262 /* Scene2.mm */; };
+		DE79DE221491B85700913262 /* PlayGame.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE79DE211491B85600913262 /* PlayGame.mm */; };
+		DE8B9DF814A01A580039C7BB /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = DE8B9DF714A01A580039C7BB /* menu.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -475,9 +475,9 @@
 		DE79DC941491AD5200913262 /* GLES-Render.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "GLES-Render.mm"; sourceTree = "<group>"; };
 		DE79DC961491AD5200913262 /* GameConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameConfig.h; sourceTree = "<group>"; };
 		DE79DC971491AD5200913262 /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blocks.png; path = Resources/blocks.png; sourceTree = "<group>"; };
-		DE79DC9E1491AE8D00913262 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menu.png; path = ../../../../Pictures/menu.png; sourceTree = "<group>"; };
-		DE79DE201491B85600913262 /* Scene2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene2.h; sourceTree = "<group>"; };
-		DE79DE211491B85600913262 /* Scene2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Scene2.mm; sourceTree = "<group>"; };
+		DE79DE201491B85600913262 /* PlayGame.h */ = {isa = PBXFileReference; fileEncoding = 4; path = PlayGame.h; sourceTree = "<group>"; };
+		DE79DE211491B85600913262 /* PlayGame.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlayGame.mm; sourceTree = "<group>"; };
+		DE8B9DF714A01A580039C7BB /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menu.png; path = Resources/menu.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -543,8 +543,8 @@
 				DE79DC931491AD5200913262 /* GLES-Render.h */,
 				DE79DC941491AD5200913262 /* GLES-Render.mm */,
 				DE79DC961491AD5200913262 /* GameConfig.h */,
-				DE79DE201491B85600913262 /* Scene2.h */,
-				DE79DE211491B85600913262 /* Scene2.mm */,
+				DE79DE201491B85600913262 /* PlayGame.h */,
+				DE79DE211491B85600913262 /* PlayGame.mm */,
 				DE79DAC61491AD5000913262 /* Resources */,
 				DE79DADA1491AD5000913262 /* libs */,
 				DE79DC861491AD5200913262 /* Supporting Files */,
@@ -555,7 +555,7 @@
 		DE79DAC61491AD5000913262 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DE79DC9E1491AE8D00913262 /* menu.png */,
+				DE8B9DF714A01A580039C7BB /* menu.png */,
 				DE79DAC71491AD5000913262 /* Default.png */,
 				DE79DAC91491AD5000913262 /* fps_images.png */,
 				DE79DACB1491AD5000913262 /* Icon-72.png */,
@@ -1071,7 +1071,7 @@
 				DE79DAD61491AD5000913262 /* Icon@2x.png in Resources */,
 				DE79DAD91491AD5000913262 /* iTunesArtwork in Resources */,
 				DE79DC981491AD5200913262 /* blocks.png in Resources */,
-				DE79DC9F1491AE8D00913262 /* menu.png in Resources */,
+				DE8B9DF814A01A580039C7BB /* menu.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1216,7 +1216,7 @@
 				DE79DC8F1491AD5200913262 /* RootViewController.mm in Sources */,
 				DE79DC921491AD5200913262 /* MainMenu.mm in Sources */,
 				DE79DC951491AD5200913262 /* GLES-Render.mm in Sources */,
-				DE79DE221491B85700913262 /* Scene2.mm in Sources */,
+				DE79DE221491B85700913262 /* PlayGame.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

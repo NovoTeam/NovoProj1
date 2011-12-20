@@ -9,6 +9,7 @@
 
 // Import the interfaces
 #import "HelloWorldLayer.h"
+#import "CCTouchDispatcher.h"
 
 @implementation HelloWorld
 
@@ -33,7 +34,7 @@
         [self addChild:_ball];
         
         // Create a world
-        b2Vec2 gravity = b2Vec2(0.0f, -30.0f); //set velocity - gravity vector
+        b2Vec2 gravity = b2Vec2(0.0f, -10.8f); //set velocity - gravity vector
         bool doSleep = true; //A sleeping object will not take up processing time until certain actions occur such as colliding with another object
         _world = new b2World(gravity, doSleep); //Box2D world object that controls all the Box2D related stuff
         
@@ -62,10 +63,11 @@
         //create the ball body like the groundbody
         b2BodyDef ballBodyDef;
         ballBodyDef.type = b2_dynamicBody; //default value for bodies is to be a static body, which means it does not move and will not be simulated. Obviously we want our ball to be simulated
-        ballBodyDef.position.Set(100/PTM_RATIO, 100/PTM_RATIO);
+        ballBodyDef.position.Set(400/PTM_RATIO, 320/PTM_RATIO);
         ballBodyDef.userData = _ball; //set the user data parameter to be our ball CCSprite
         _body = _world->CreateBody(&ballBodyDef); //add one fixture objects
         
+        //create a circle shape
         b2CircleShape circle;
         circle.m_radius = 26.0/PTM_RATIO;
         
@@ -79,6 +81,7 @@
         self.isAccelerometerEnabled = YES; //enable accel so we can make it bounce around!
         
         [self schedule:@selector(tick:)];
+        [[CCTouchDispatcher sharedDispatcher]addTargetedDelegate:self priority:0 swallowsTouches: YES];
         
     }
     return self;
@@ -88,11 +91,10 @@
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
     
     // Landscape left values
-    b2Vec2 gravity(-acceleration.y * 15, acceleration.x *15);
+    b2Vec2 gravity(-acceleration.y * 15, acceleration.x *12);
     _world->SetGravity(gravity);
     
 }
-
 - (void)tick:(ccTime) dt {
     
     //perform the physics simulation. The two parameters here are velocity iterations and position iterations
@@ -110,7 +112,16 @@
     }
     
 }
-
+-(BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    return YES;
+}
+-(void) ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    CGPoint location = [touch locationInView:[touch view]];
+    CGPoint convertedLocation=[[CCDirector sharedDirector]convertToGL:location];
+    _ball.position=convertedLocation;
+}
 - (void)dealloc {    
     delete _world;
     _body = NULL;

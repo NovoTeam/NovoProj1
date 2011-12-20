@@ -9,7 +9,7 @@
 
 // Import the interfaces
 #import "MainMenu.h"
-#import "Scene2.h"
+#import "PlayGame.h"
 
 //Pixel to metres ratio. Box2D uses metres as the unit for measurement.
 //This ratio defines how many pixels correspond to 1 Box2D "metre"
@@ -37,7 +37,6 @@ enum {
 	
 	// add layer as a child to scene
 	[scene addChild: layer];
-	
 	// return the scene
 	return scene;
 }
@@ -48,26 +47,32 @@ enum {
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) 
-    {
-        CCMenuItemImage *menu_image = [CCMenuItemImage itemFromNormalImage:@"menu.png" selectedImage:@"menu.png" /*target:self selector:@selector(doThis:)*/];
-        //target:self selector:@selector(doThis:)
-        
-        CCMenuItemImage *profile=[[CCMenuItemImage itemFromNormalImage:@"Icon-Small.png" selectedImage:@"Icon-Small.png" target:self selector:@selector(doThis:)]retain];
+    {   
+        //CCMenuItemLabel *x=[CCMenuItemLabel itemWithLabel:<#(CCNode<CCLabelProtocol,CCRGBAProtocol> *)#> target:<#(id)#> selector:<#(SEL)#>]
+        CCMenuItemImage *profile=[CCMenuItemImage itemFromNormalImage: @"Icon-Small.png" selectedImage:@"icon-Small.png" target:self selector:@selector(doThat:)];        
         profile.position=ccp(-160, 0);
         
-        CCMenuItemImage *play_game=[CCMenuItemImage itemFromNormalImage: @"Icon-Small.png" selectedImage:@"icon-Small.png" target:self selector:@selector(doThis:)];
-        
-        CCMenuItemImage *quit=[CCMenuItemImage itemFromNormalImage: @"Icon-Small.png" selectedImage:@"icon-Small.png" target:self selector:@selector(doThis:)];
+        CCMenuItemImage *play_game=[CCMenuItemImage itemFromNormalImage:@"Icon-Small.png" selectedImage:@"Icon-Small.png" target:self selector:@selector(playGame:)];
+
+        CCMenuItemImage *quit=[CCMenuItemImage itemFromNormalImage: @"Icon-Small.png" selectedImage:@"icon-Small.png" target:self selector:@selector(doThat:)];
         quit.position=ccp(160, 0);
-        
-        CCMenu *main_menu = [CCMenu menuWithItems: menu_image, profile, play_game, quit, nil];
+        //CCMenuItemImage *menu_image = [CCMenuItemImage itemFromNormalImage:@"menu.png" selectedImage:@"menu.png"];
+        CCSprite* background=[CCSprite spriteWithFile:@"menu.png"];
+        CCLayer* layer=[CCLayer node];
+        [self addChild:layer];
+        [self addChild:background];
+        CCMenu *main_menu = [CCMenu menuWithItems: profile, play_game, quit, nil];
         [self addChild:main_menu];
 	}
 	return self;
 }
--(void) doThis:(id)sender
+-(void) playGame:(id)sender
 {
     [[CCDirector sharedDirector]replaceScene:[Scene2 node]];
+}
+-(void) doThat:(id)sender
+{
+    //[[CCDirector sharedDirector]replaceScene:[Scene2 node]];
 }
 /*
 -(void) draw
