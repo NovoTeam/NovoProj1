@@ -68,7 +68,7 @@ enum {
 }
 -(void) playGame:(id)sender
 {
-    [[CCDirector sharedDirector]replaceScene:[Scene2 node]];
+    [[CCDirector sharedDirector]replaceScene:[PlayGame node]];
 }
 -(void) doThat:(id)sender
 {

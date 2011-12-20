@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 
-@interface Scene2 : CCLayer {
+@interface PlayGame: CCLayer {
     
 }
 +(id)scene;

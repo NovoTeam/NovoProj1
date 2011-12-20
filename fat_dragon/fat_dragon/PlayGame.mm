@@ -9,14 +9,14 @@
 #import "PlayGame.h"
 #import "MainMenu.h"
 
-@implementation Scene2
+@implementation PlayGame
 +(CCScene *) scene
 {
 	// 'scene' is an autorelease object.
 	CCScene *scene = [CCScene node];
 	
 	// 'layer' is an autorelease object.
-	Scene2 *layer = [Scene2 node];
+	PlayGame *layer = [PlayGame node];
 	
 	// add layer as a child to scene
 	[scene addChild: layer];
