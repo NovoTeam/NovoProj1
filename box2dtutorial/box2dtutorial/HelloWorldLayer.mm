@@ -27,13 +27,8 @@
     {
         CGSize winSize = [CCDirector sharedDirector].winSize;
         
-        // Create sprite and add it to the layer
-        _ball = [CCSprite spriteWithFile:@"Ball.jpg" rect:CGRectMake(0, 0, 52, 52)];
-        _ball.position = ccp(100, 100);
-        [self addChild:_ball];
-        
         // Create a world
-        b2Vec2 gravity = b2Vec2(0.0f, -30.0f); //set velocity - gravity vector
+        b2Vec2 gravity = b2Vec2(0.0f, 0.0f); //set velocity - gravity vector
         bool doSleep = true; //A sleeping object will not take up processing time until certain actions occur such as colliding with another object
         _world = new b2World(gravity, doSleep); //Box2D world object that controls all the Box2D related stuff
         
@@ -42,22 +37,26 @@
         groundBodyDef.position.Set(0,0);
         _groundBody = _world->CreateBody(&groundBodyDef);
         b2PolygonShape groundBox;
-        b2FixtureDef boxShapeDef;
-        boxShapeDef.shape = &groundBox;
+        b2FixtureDef groundBoxDef;
+        groundBoxDef.shape = &groundBox;
         groundBox.SetAsEdge(b2Vec2(0,0), b2Vec2(winSize.width/PTM_RATIO, 0));
-        _groundBody->CreateFixture(&boxShapeDef);
+        _bottomFixture = _groundBody->CreateFixture(&groundBoxDef);
         groundBox.SetAsEdge(b2Vec2(0,0), b2Vec2(0, winSize.height/PTM_RATIO));
-        _groundBody->CreateFixture(&boxShapeDef);
-        groundBox.SetAsEdge(b2Vec2(0, winSize.height/PTM_RATIO), 
-                            b2Vec2(winSize.width/PTM_RATIO, winSize.height/PTM_RATIO));
-        _groundBody->CreateFixture(&boxShapeDef);
-        groundBox.SetAsEdge(b2Vec2(winSize.width/PTM_RATIO, 
-                                   winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO, 0));
-        _groundBody->CreateFixture(&boxShapeDef);
+        _groundBody->CreateFixture(&groundBoxDef);
+        groundBox.SetAsEdge(b2Vec2(0, winSize.height/PTM_RATIO), b2Vec2(winSize.width/PTM_RATIO, 
+                                                                        winSize.height/PTM_RATIO));
+        _groundBody->CreateFixture(&groundBoxDef);
+        groundBox.SetAsEdge(b2Vec2(winSize.width/PTM_RATIO, winSize.height/PTM_RATIO), 
+                            b2Vec2(winSize.width/PTM_RATIO, 0));
+        _groundBody->CreateFixture(&groundBoxDef);
         
         
         // *** Create ball body and shape (one body object can contain multiple fixture objects)
-        
+        CCSprite *ball = [CCSprite spriteWithFile:@"Ball.jpg"
+                rect:CGRectMake(0, 0, 52, 52)];
+        ball.position = ccp(100, 100);
+        ball.tag = 1;
+        [self addChild:ball];
         
         //create the ball body like the groundbody
         b2BodyDef ballBodyDef;
@@ -72,39 +71,17 @@
         b2FixtureDef ballShapeDef;
         ballShapeDef.shape = &circle; //its a ball so use a circle shape
         ballShapeDef.density = 1.0f;
-        ballShapeDef.friction = 0.2f;
-        ballShapeDef.restitution = 0.8f;
+        ballShapeDef.friction = 0.f;
+        ballShapeDef.restitution = 1.0f; //at 1.0 restitution, the ball will bounce back with equal force to the impact.
         _ballFixture = _ballBody->CreateFixture(&ballShapeDef); //add another fixture object
+        
+        b2Vec2 force = b2Vec2(10, 10);
+        _ballBody->ApplyLinearImpulse(force, ballBodyDef.position); //we need this to get the ball moving in the first place!
         
         self.isTouchEnabled = YES; //enable accel so we can make it bounce around!
         
         
-        // Create paddle and add it to the layer
-        CCSprite *paddle = [CCSprite spriteWithFile:@"icon-72.png"];
-        paddle.position = ccp(winSize.width/2, 50);
-        [self addChild:paddle];
-        
-        // Create paddle body
-        b2BodyDef paddleBodyDef;
-        paddleBodyDef.type = b2_dynamicBody;
-        paddleBodyDef.position.Set(winSize.width/2/PTM_RATIO, 50/PTM_RATIO);
-        paddleBodyDef.userData = paddle;
-        _paddleBody = _world->CreateBody(&paddleBodyDef);
-        
-        // Create paddle shape
-        b2PolygonShape paddleShape;
-        paddleShape.SetAsBox(paddle.contentSize.width/PTM_RATIO/2, 
-                             paddle.contentSize.height/PTM_RATIO/2);
-        
-        // Create shape definition and add to body
-        b2FixtureDef paddleShapeDef;
-        paddleShapeDef.shape = &paddleShape;
-        paddleShapeDef.density = 10.0f;
-        paddleShapeDef.friction = 0.4f;
-        paddleShapeDef.restitution = 0.1f;
-        _paddleFixture = _paddleBody->CreateFixture(&paddleShapeDef);
-        
-        //[self schedule:@selector(tick:)];
+        [self schedule:@selector(tick:)];
         
     }
     return self;
@@ -119,15 +96,15 @@
     location = [[CCDirector sharedDirector] convertToGL:location]; //convert the touch location to our Cocos2D coordinates (convertToGL) 
     b2Vec2 locationWorld = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO); //and then to our Box2D coordinates (locationWorld)
     
-    if (_paddleFixture->TestPoint(locationWorld)) //see if the touch point is within the fixture. 
+    if (_ballFixture->TestPoint(locationWorld)) //see if the touch point is within the fixture. 
     {
         //If it is, we create something called a “mouse joint.” a mouse joint is used to make a body move toward a specified point – in this case where the user is tapping
         b2MouseJointDef md;
         md.bodyA = _groundBody;
-        md.bodyB = _paddleBody; //the body you want to move
+        md.bodyB = _ballBody; //the body you want to move
         md.target = locationWorld; //specify where you want the target to move – in our case where the user is tapping
         md.collideConnected = true; //treat it as a collision, rather than ignoring it. This is very important. When I was trying to get this working, I didn’t have this set, so when I was moving the paddle with my mouse it wouldn’t collide with the edges of the screen
-        md.maxForce = 1000.0f * _paddleBody->GetMass(); //If you reduce this amount, the body will react more slowly to your mouse movements
+        md.maxForce = 1000.0f * _ballBody->GetMass(); //If you reduce this amount, the body will react more slowly to your mouse movements
         
         md.bodyB->SetAwake(true);
         _mouseJoint = (b2MouseJoint *)_world->CreateJoint(&md);
@@ -176,7 +153,6 @@
     
 }
 
-/*
 - (void)tick:(ccTime) dt {
     
     //perform the physics simulation. The two parameters here are velocity iterations and position iterations
@@ -185,20 +161,31 @@
     //iterate through all of the bodies in the world looking for those with user data set
     for(b2Body *b = _world->GetBodyList(); b; b=b->GetNext()) {    
         if (b->GetUserData() != NULL) {
-            //update the position and angle of the sprite to match the physics simulation
-            CCSprite *ballData = (CCSprite *)b->GetUserData();
-            ballData.position = ccp(b->GetPosition().x * PTM_RATIO,
-                                    b->GetPosition().y * PTM_RATIO);
-            ballData.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
+            CCSprite *sprite = (CCSprite *)b->GetUserData();                        
+            sprite.position = ccp(b->GetPosition().x * PTM_RATIO,
+                                  b->GetPosition().y * PTM_RATIO);
+            sprite.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
+            if (sprite.tag == 1) {
+                static int maxSpeed = 10;
+                
+                b2Vec2 velocity = b->GetLinearVelocity();
+                float32 speed = velocity.Length();
+                
+                if (speed > maxSpeed) {
+                    b->SetLinearDamping(0.5);
+                } else if (speed < maxSpeed) {
+                    b->SetLinearDamping(0.0);
+                }
+                
+            }
         }        
     }
     
-}*/
+}
 
 - (void)dealloc {    
     delete _world;
-    _ballBody = NULL;
-    _world = NULL;
+    _groundBody = NULL;
     [super dealloc];
 }
 

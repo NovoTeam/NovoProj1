@@ -17,11 +17,10 @@
     b2World *_world;
     b2Body *_ballBody;
     CCSprite *_ball;
+    b2Fixture *_bottomFixture;
     b2MouseJoint *_mouseJoint;
     b2Fixture *_ballFixture;
     b2Body *_groundBody;
-    b2Fixture *_paddleFixture;
-    b2Body *_paddleBody;
 }
 
 + (id) scene;
