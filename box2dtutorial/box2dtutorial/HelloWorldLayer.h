@@ -15,8 +15,13 @@
 
 @interface HelloWorld : CCLayer { 
     b2World *_world;
-    b2Body *_body;
+    b2Body *_ballBody;
     CCSprite *_ball;
+    b2MouseJoint *_mouseJoint;
+    b2Fixture *_ballFixture;
+    b2Body *_groundBody;
+    b2Fixture *_paddleFixture;
+    b2Body *_paddleBody;
 }
 
 + (id) scene;

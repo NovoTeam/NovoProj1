@@ -9,9 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 
-@interface PlayGame: CCLayer {
+@interface Scene2 : CCLayer {
     
 }
 +(id)scene;
--(void) back:(id) sender;
 @end

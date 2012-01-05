@@ -13,10 +13,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "189021211491B64900F0EBDC"
-               BuildableName = "box2dtutorial.app"
-               BlueprintName = "box2dtutorial"
-               ReferencedContainer = "container:box2dtutorial.xcodeproj">
+               BlueprintIdentifier = "DE79DAB01491AD5000913262"
+               BuildableName = "fat_dragon.app"
+               BlueprintName = "fat_dragon"
+               ReferencedContainer = "container:fat_dragon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -38,10 +38,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "189021211491B64900F0EBDC"
-            BuildableName = "box2dtutorial.app"
-            BlueprintName = "box2dtutorial"
-            ReferencedContainer = "container:box2dtutorial.xcodeproj">
+            BlueprintIdentifier = "DE79DAB01491AD5000913262"
+            BuildableName = "fat_dragon.app"
+            BlueprintName = "fat_dragon"
+            ReferencedContainer = "container:fat_dragon.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "189021211491B64900F0EBDC"
-            BuildableName = "box2dtutorial.app"
-            BlueprintName = "box2dtutorial"
-            ReferencedContainer = "container:box2dtutorial.xcodeproj">
+            BlueprintIdentifier = "DE79DAB01491AD5000913262"
+            BuildableName = "fat_dragon.app"
+            BlueprintName = "fat_dragon"
+            ReferencedContainer = "container:fat_dragon.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
