@@ -24,5 +24,6 @@
 +(CCScene *) scene;
 // adds a new sprite at a given coordinate
 //-(void) addNewSpriteWithCoords:(CGPoint)p;
--(void) doThis:(id)sender;
+-(void) playGame:(id)sender;
+-(void) profile:(id)sender;
 @end
