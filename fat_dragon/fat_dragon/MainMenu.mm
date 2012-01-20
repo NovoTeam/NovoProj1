@@ -46,13 +46,13 @@
         CCMenuItemImage *profile=[CCMenuItemImage itemFromNormalImage: @"profile_button.png" selectedImage:@"profile_button.png" target:self selector:@selector(profile:)];        
         profile.position=ccp(-160, -50);
         
-        CCMenuItemImage *play_game=[CCMenuItemImage itemFromNormalImage:@"play.png" selectedImage:@"play.png" target:self selector:@selector(playGame:)];
+        CCMenuItemImage *play_game=[CCMenuItemImage itemFromNormalImage:@"play_button.png" selectedImage:@"play_button.png" target:self selector:@selector(playGame:)];
         play_game.position=ccp(0, -50);
         //right now having problem to quit game
-        CCMenuItemImage *quit=[CCMenuItemImage itemFromNormalImage: @"quit.png" selectedImage:@"quit.png"];
+        CCMenuItemImage *quit=[CCMenuItemImage itemFromNormalImage: @"quit.png" selectedImage:@"quit_button.png"];
         
         quit.position=ccp(160, -50);
-        CCSprite* menuBackground=[CCSprite spriteWithFile:@"menu.png"];
+        CCSprite* menuBackground=[CCSprite spriteWithFile:@"menu_background.png"];
         CCLayer* layer=[CCLayer node];
         [self addChild:layer];
         [self addChild:menuBackground];

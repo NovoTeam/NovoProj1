@@ -35,7 +35,7 @@
         //create invisible edges around the entire screen, that line up with the edges of our iPhone
         b2BodyDef groundBodyDef;
         groundBodyDef.position.Set(0,0);
-        _groundBody = _world->CreateBody(&groundBodyDef);
+        b2Body *groundBody = _world->CreateBody(&groundBodyDef);
         b2PolygonShape groundBox;
         b2FixtureDef groundBoxDef;
         groundBoxDef.shape = &groundBox;
@@ -75,10 +75,10 @@
         ballShapeDef.restitution = 1.0f; //at 1.0 restitution, the ball will bounce back with equal force to the impact.
         _ballFixture = _ballBody->CreateFixture(&ballShapeDef); //add another fixture object
         
-        b2Vec2 force = b2Vec2(10, 10);
-        _ballBody->ApplyLinearImpulse(force, ballBodyDef.position); //we need this to get the ball moving in the first place!
-        
-        self.isTouchEnabled = YES; //enable accel so we can make it bounce around!
+        //b2Vec2 force = b2Vec2(10, 10);
+        //_ballBody->ApplyLinearImpulse(force, ballBodyDef.position); //we need this to get the ball moving in the first place!
+        self.isAccelerometerEnabled = YES; //enable accel so we can make it bounce around!
+        //self.isTouchEnabled = YES; //enable accel so we can make it bounce around!
         
         
         [self schedule:@selector(tick:)];

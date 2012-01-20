@@ -10,6 +10,7 @@
 #import "MainMenu.h"
 #import "Story.h"
 #import "Arcade.h"
+#import "Versus.h"
 
 @implementation PlayGame
 +(CCScene *) scene
@@ -41,6 +42,11 @@
     [[CCDirector sharedDirector]replaceScene:[Arcade node]];
     
 }
+-(void) versus:(id) sender
+{
+    [[CCDirector sharedDirector]replaceScene:[Versus node]];
+    
+}
 -(id) init
 {
 	// always call "super" init
@@ -51,12 +57,14 @@
         backItem.position=ccp(-180, -130);
         CCMenuItemImage *arcadeItem = [CCMenuItemImage itemFromNormalImage:@"arcade_button.png" selectedImage:@"arcade_button.png" target:self selector:@selector(arcade:)];
         arcadeItem.position=ccp(-160, 0);
-        CCMenuItemImage *storyItem = [CCMenuItemImage itemFromNormalImage:@"Icon-72.png" selectedImage:@"Icon-72.png" target:self selector:@selector(story:)];
+        CCMenuItemImage *storyItem = [CCMenuItemImage itemFromNormalImage:@"story_button.png" selectedImage:@"story_button.png" target:self selector:@selector(story:)];
+        CCMenuItemImage *versusItem = [CCMenuItemImage itemFromNormalImage:@"versus_button.png" selectedImage:@"versus_button.png" target:self selector:@selector(versus:)];  
+        versusItem.position=ccp(160, 0);
         CCSprite* menuBackground=[CCSprite spriteWithFile:@"playGame_background.png"];
         CCLayer* layer=[CCLayer node];
         [self addChild:layer];
         [self addChild:menuBackground];
-        CCMenu *play = [CCMenu menuWithItems: backItem, storyItem, arcadeItem, nil];
+        CCMenu *play = [CCMenu menuWithItems: backItem, storyItem, arcadeItem, versusItem, nil];
         [self addChild:play];
 	}
 	return self;

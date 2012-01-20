@@ -35,7 +35,7 @@
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init]))
     {
-        CCMenuItemImage *backItem = [CCMenuItemImage itemFromNormalImage:@"finish_button.png" selectedImage:@"finish_button.png" target:self selector:@selector(back:)];
+        CCMenuItemImage *backItem = [CCMenuItemImage itemFromNormalImage:@"back_button.png" selectedImage:@"back_button.png" target:self selector:@selector(back:)];
         backItem.position=ccp(180, -130);
         CCSprite* bagBackground=[CCSprite spriteWithFile:@"bag_background.png"];
         CCLayer* layer=[CCLayer node];
