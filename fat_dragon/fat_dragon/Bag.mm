@@ -7,7 +7,7 @@
 //
 
 #import "Bag.h"
-#import "Story.h"
+#import "Stage.h"
 
 @implementation Bag
 +(CCScene *) scene
@@ -26,8 +26,7 @@
 }
 -(void) back:(id) sender
 {
-    [[CCDirector sharedDirector]replaceScene:[Story node]];
-    
+    [[CCDirector sharedDirector]replaceScene:[Stage node]];
 }
 -(id) init
 {

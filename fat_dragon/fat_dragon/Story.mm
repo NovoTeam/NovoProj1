@@ -8,8 +8,7 @@
 
 #import "Story.h"
 #import "MainMenu.h"
-#import "Bag.h"
-
+#import "Island.h"
 @implementation Story
 +(CCScene *) scene
 {
@@ -30,9 +29,9 @@
     [[CCDirector sharedDirector]replaceScene:[MainMenu node]];
     
 }
--(void) bag:(id) sender
+-(void) next:(id) sender
 {
-    [[CCDirector sharedDirector]replaceScene:[Bag node]];
+    [[CCDirector sharedDirector]replaceScene:[Island node]];
     
 }
 -(id) init
@@ -43,13 +42,15 @@
     {
         CCMenuItemImage *backItem = [CCMenuItemImage itemFromNormalImage:@"back_button.png" selectedImage:@"back_button.png" target:self selector:@selector(back:)];
         backItem.position=ccp(-180, -130);
-        CCMenuItemImage *bagItem = [CCMenuItemImage itemFromNormalImage:@"bag_button.png" selectedImage:@"bag_button.png" target:self selector:@selector(bag:)];
-        bagItem.position=ccp(180, -130);        
+       
+        CCMenuItemImage *nextItem = [CCMenuItemImage itemFromNormalImage:@"next_button.png" selectedImage:@"next_button.png" target:self selector:@selector(next:)];
+        nextItem.position=ccp(180, -130);
+        
         CCSprite* storyBackground=[CCSprite spriteWithFile:@"story_background.png"];
         CCLayer* layer=[CCLayer node];
         [self addChild:layer];
         [self addChild:storyBackground];
-        CCMenu *storyMenu = [CCMenu menuWithItems: backItem, bagItem, nil];
+        CCMenu *storyMenu = [CCMenu menuWithItems: backItem, nextItem, nil];
         [self addChild:storyMenu];
 	}
 	return self;
