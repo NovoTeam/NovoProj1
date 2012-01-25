@@ -16,6 +16,12 @@
 //to define the ratio so that your most common object type is 1x1 metre.
 #define PTM_RATIO 32
 
+// enums that will be used as tags
+enum {
+	kTagTileMap = 1,
+	kTagBatchNode = 1,
+	kTagAnimation1 = 1,
+};
 
 // GameLevel implementation
 @implementation GameLevel
@@ -63,6 +69,8 @@
     return self;
 }
 
+
+
 - (void)panForTranslation:(CGPoint)translation {    
     if (selSprite) {
         CGPoint newPos = ccpAdd(selSprite.position, translation);
@@ -85,7 +93,7 @@
 }
 
 //helper method that loops through all of the sprites in the movableSprites array, looking for the first sprite that the touch intersects
-- (void)selectSpriteForTouch:(CGPoint)touchLocation {
+- (void) selectSpriteForTouch:(CGPoint)touchLocation {
     CCSprite * newSprite = nil;
     for (CCSprite *sprite in movableSprites) 
     {
@@ -113,6 +121,41 @@
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
     [self selectSpriteForTouch:touchLocation];      
     return TRUE;    
+}
+
+-(void) addNewSpriteWithCoords:(CGPoint)p 
+{
+    CCLOG(@"Add sprite %0.2f x %02.f",p.x,p.y);
+    CCSpriteBatchNode *batch = (CCSpriteBatchNode*) [self getChildByTag:kTagBatchNode];
+    
+    //We have a 64x64 sprite sheet with 4 different 32x32 images.  The following code is
+    //just randomly picking one of the images
+    int idx = (CCRANDOM_0_1() > .5 ? 0:1);
+    int idy = (CCRANDOM_0_1() > .5 ? 0:1);
+    CCSprite *sprite = [CCSprite spriteWithBatchNode:batch rect:CGRectMake(32 * idx,32 * idy,32,32)];
+    [batch addChild:sprite];
+    
+    sprite.position = ccp( p.x, p.y);
+    
+    // Define the dynamic body.
+    //Set up a 1m squared box in the physics world
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    
+    bodyDef.position.Set(p.x/PTM_RATIO, p.y/PTM_RATIO);
+    bodyDef.userData = sprite;
+    b2Body *body = world->CreateBody(&bodyDef);
+    
+    // Define another box shape for our dynamic body.
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(.5f, .5f);//These are mid points for our 1m box
+    
+    // Define the dynamic body fixture.
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;	
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 0.3f;
+    body->CreateFixture(&fixtureDef);
 }
 
 // on "dealloc" you need to release all your retained objects
