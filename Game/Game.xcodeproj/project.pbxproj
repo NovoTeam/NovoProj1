@@ -160,6 +160,7 @@
 		18E974C014CF8AAB00E3F6AF /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 18E974B814CF8AAB00E3F6AF /* iTunesArtwork */; };
 		18E974C814CF8BFF00E3F6AF /* Icon 512x512.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E974C714CF8BFF00E3F6AF /* Icon 512x512.png */; };
 		18E974CE14CF8DA200E3F6AF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18E974CD14CF8DA200E3F6AF /* Info.plist */; };
+		DE5F610914CFA6940020D096 /* background_music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DE5F610814CFA6930020D096 /* background_music.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -474,6 +475,7 @@
 		18E974B814CF8AAB00E3F6AF /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = Resources/iTunesArtwork; sourceTree = "<group>"; };
 		18E974C714CF8BFF00E3F6AF /* Icon 512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon 512x512.png"; path = "Resources/Icon 512x512.png"; sourceTree = "<group>"; };
 		18E974CD14CF8DA200E3F6AF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE5F610814CFA6930020D096 /* background_music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background_music.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,6 +552,7 @@
 			isa = PBXGroup;
 			children = (
 				18E974CD14CF8DA200E3F6AF /* Info.plist */,
+				DE5F610814CFA6930020D096 /* background_music.mp3 */,
 				18E974C714CF8BFF00E3F6AF /* Icon 512x512.png */,
 				18E974B114CF8AAB00E3F6AF /* watermelon.png */,
 				18E974B214CF8AAB00E3F6AF /* grape.png */,
@@ -1065,6 +1068,7 @@
 				18E974C014CF8AAB00E3F6AF /* iTunesArtwork in Resources */,
 				18E974C814CF8BFF00E3F6AF /* Icon 512x512.png in Resources */,
 				18E974CE14CF8DA200E3F6AF /* Info.plist in Resources */,
+				DE5F610914CFA6940020D096 /* background_music.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

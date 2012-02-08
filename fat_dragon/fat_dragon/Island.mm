@@ -48,7 +48,7 @@
         CCMenuItemImage *backItem = [CCMenuItemImage itemFromNormalImage:@"back_button.png" selectedImage:@"back_button.png" target:self selector:@selector(back:)];
         backItem.position=ccp(-180, -130);
         CCMenuItemImage *stageItem = [CCMenuItemImage itemFromNormalImage:@"stage_button.png" selectedImage:@"stage_button.png" target:self selector:@selector(stage:)];
-        stageItem.position=ccp(0, 0);
+        stageItem.position=ccp(50, -130);
         CCMenu *islandMenu = [CCMenu menuWithItems: backItem, stageItem, nil];
         [self addChild:islandMenu];
     }
