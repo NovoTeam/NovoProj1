@@ -20,11 +20,11 @@
 	GLESDebugDraw *m_debugDraw;
     CCSprite * background;
     CCSprite * selSprite;
-    NSMutableArray * movableSprites;
+    NSMutableArray * fruitSprites;
 }
 
 // returns a CCScene that contains the GameLevel as the only child
 +(CCScene *) scene;
 // adds a new sprite at a given coordinate
--(void) addNewSpriteWithCoords:(CGPoint)p;
+-(void) addGravityToSprite:(CCSprite *)sprite;
 @end
