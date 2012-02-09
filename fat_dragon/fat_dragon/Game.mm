@@ -59,9 +59,11 @@ enum {
         CGSize winSize = [CCDirector sharedDirector].winSize;
         
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565]; //uses less memory by loading a lower quality background
+        //
         background = [CCSprite spriteWithFile:@"Icon 512x512.png"]; //load background
         background.anchorPoint = ccp(0,0); //anchor the background to bottom left
         [self addChild:background];
+        
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default]; //go back to normal memory usage and high-res images
         
         fruitSprites = [[NSMutableArray alloc] init];
@@ -84,14 +86,26 @@ enum {
         CCMenu *GameMenu = [CCMenu menuWithItems: backItem, nil];
         [self addChild:GameMenu];
         /*******End**/
-        
-        
     }
+    
     [[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
     
     return self;
 }
-
+//START
+//Author: Xiang Guo
+//checking how many item is eated and set up a game finished condition
+/*-(void) setGame:(NSMutableArray*) movableSprites
+{
+    CGPoint dragonLocation=[self convertToNodeSpace:<#(CGPoint)#>]
+    for (CCSprite *sprite in movableSprites) 
+    {
+        if (CGRectContainsPoint(dragon, )) {
+            <#statements#>
+        }
+    }
+}*/
+//END
 
 - (void) panForTranslation:(CGPoint)translation {    
     if (selSprite) {

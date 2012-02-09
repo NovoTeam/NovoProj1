@@ -83,7 +83,7 @@ CCSprite *volume;
 
         
         //right now having problem to quit game
-        CCMenuItemImage *quit=[CCMenuItemImage itemFromNormalImage: @"quit.png" selectedImage:@"quit_button.png"];
+        CCMenuItemImage *quit=[CCMenuItemImage itemFromNormalImage: @"quit_button.png" selectedImage:@"quit_button.png"];
         quit.position=ccp(160, -50);
         
         //adding all these menu button to a menu object
