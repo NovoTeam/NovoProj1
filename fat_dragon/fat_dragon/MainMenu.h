@@ -19,11 +19,15 @@
 	b2World* world;
 	GLESDebugDraw *m_debugDraw;
 }
-
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;
-// adds a new sprite at a given coordinate
-//-(void) addNewSpriteWithCoords:(CGPoint)p;
+//method for going to playGame menu
 -(void) playGame:(id)sender;
+//method for going to profile menu
 -(void) profile:(id)sender;
+
+//method for changing sound
+-(void) changeSound:(CGPoint)touchLocation;
+//method for play back ground music
+-(void)defaultBackgroundMusic;
 @end

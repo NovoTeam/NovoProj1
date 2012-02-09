@@ -40,11 +40,18 @@ enum {
 	// return the scene
 	return scene;
 }
+
+//START
+//Author: Xiang Guo
+//help to go back to main menu
 -(void) back:(id) sender
 {
     [[CCDirector sharedDirector]replaceScene:[MainMenu node]];
     
 }
+//END
+
+
 // on "init" you need to initialize your instance
 -(id) init
 {
@@ -70,10 +77,13 @@ enum {
             [self addChild:sprite];
             [fruitSprites addObject:sprite];
         }
+        
+        /**XiangGuo*********set up the menu item for go back to main menu***/
         CCMenuItemImage *backItem = [CCMenuItemImage itemFromNormalImage:@"back_button.png" selectedImage:@"back_button.png" target:self selector:@selector(back:)];
         backItem.position=ccp(-180, -130);
         CCMenu *GameMenu = [CCMenu menuWithItems: backItem, nil];
         [self addChild:GameMenu];
+        /*******End**/
         
         
     }
@@ -81,7 +91,6 @@ enum {
     
     return self;
 }
-
 
 
 - (void) panForTranslation:(CGPoint)translation {    
