@@ -15,6 +15,7 @@
 //Box2D is optimized for objects of 1x1 metre therefore it makes sense
 //to define the ratio so that your most common object type is 1x1 metre.
 #define PTM_RATIO 32
+#define FALL_HEIGHT 20
 
 // enums that will be used as tags
 enum {
@@ -51,12 +52,49 @@ enum {
 }
 //END
 
+//PAT start -- create the fruits 
+-(void)addTarget {
+    
+    CCSprite *target = [fruitSprites objectAtIndex: (arc4random()%4)];
+    
+    // Determine where to spawn the target along the Y axis
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    int minY = target.contentSize.height/2;
+    int maxY = winSize.height - target.contentSize.height/2;
+    int rangeY = maxY - minY;
+    int actualY = (arc4random() % rangeY) + minY;
+    
+    // Create the target slightly off-screen along the right edge,
+    // and along a random position along the Y axis as calculated above
+    target.position = ccp(winSize.width + (target.contentSize.width/2), actualY);
+    [self addChild:target];
+    
+    // Determine speed of the target
+    int minDuration = 2.0;
+    int maxDuration = 4.0;
+    int rangeDuration = maxDuration - minDuration;
+    int actualDuration = (arc4random() % rangeDuration) + minDuration;
+    
+    // Create the actions
+    id actionMove = [CCMoveTo actionWithDuration:actualDuration 
+                                        position:ccp(-target.contentSize.width/2, actualY)];
+    id actionMoveDone = [CCCallFuncN actionWithTarget:self 
+                                             selector:@selector(spriteMoveFinished:)];
+    [target runAction:[CCSequence actions:actionMove, actionMoveDone, nil]];
+    
+}
 
 // on "init" you need to initialize your instance
 -(id) init
 {
 	if((self = [super init])) {		
         CGSize winSize = [CCDirector sharedDirector].winSize;
+        //PAT
+        b2Vec2 fruitGravity = b2Vec2(0.0f, -5.0f);
+        bool doSleep = false;
+        world = new b2World(fruitGravity, doSleep);
+        
+        
         
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565]; //uses less memory by loading a lower quality background
         //
@@ -70,15 +108,20 @@ enum {
         NSArray *images = [NSArray arrayWithObjects:@"watermelon.png", @"apple.png", @"grape.png", @"pineapple.png", nil];       
         for(int i = 0; i < images.count; ++i) {
             NSString *image = [images objectAtIndex:i];
-            CCSprite *sprite = [CCSprite spriteWithFile:image];
+            CCSprite *sprite = [CCSprite spriteWithFile:image rect:CGRectMake(0, 0, 51, 51)];
             float offsetFraction = ((float)(i+1))/(images.count+1); //for our game we wil want to use a random value (restricted to a range)
-            sprite.position = ccp(winSize.width*offsetFraction, winSize.height/2);
-        ///////PAT -- adding gravity to the sprite
-            [self addGravityToSprite:sprite];
-        ///////PAT -- end
+            sprite.position = ccp(winSize.width*offsetFraction, winSize.height - FALL_HEIGHT);
+            
             [self addChild:sprite];
             [fruitSprites addObject:sprite];
+            
+            ///////PAT -- adding gravity to the sprite
+            [self addGravityToSprite:sprite];
+            ///////PAT -- end
+            
         }
+        
+        [self schedule:@selector(tick:)];
         
         /**XiangGuo*********set up the menu item for go back to main menu***/
         CCMenuItemImage *backItem = [CCMenuItemImage itemFromNormalImage:@"back_button.png" selectedImage:@"back_button.png" target:self selector:@selector(back:)];
@@ -162,29 +205,44 @@ enum {
 ///////PAT -- adding gravity to the sprite
 -(void) addGravityToSprite: (CCSprite *)sprite 
 {
-    b2Vec2 fruitGravity;
-    fruitGravity.Set(0.0f, -20.0f); //we may want to change this based on which type of fruit the sprite represents (if it's a watermelon, it will fall a bit faster?)
+    //b2Vec2 fruitGravity;
+    //fruitGravity.Set(0.0f, -20.0f); //we may want to change this based on which type of fruit the sprite represents (if it's a watermelon, it will fall a bit faster?)
     // Define the dynamic body.
     //Set up a 1m squared box in the physics world
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    
-    bodyDef.position.Set(sprite.position.x, sprite.position.y);
+    bodyDef.position.Set((sprite.position.x)/PTM_RATIO, (sprite.position.y)/PTM_RATIO);
     bodyDef.userData = sprite;
     b2Body *body = world->CreateBody(&bodyDef);
     
-    // Define another box shape for our dynamic body.
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(.5f, .5f);//These are mid points for our 1m box
+    // Define another circle shape for our dynamic body.
+    b2CircleShape circle;
+    circle.m_radius = (sprite.contentSize.width/2)/PTM_RATIO;
     
     // Define the dynamic body fixture.
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;	
-    fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.3f;
-    body->CreateFixture(&fixtureDef);
+    b2FixtureDef fruitDef;
+    fruitDef.shape = &circle;
+    fruitDef.density = 1.0f;
+    fruitDef.friction = 0.2f;
+    fruitDef.restitution = 0.8f;
+    body->CreateFixture(&fruitDef);
     
-    body->ApplyForce(body->GetMass()*fruitGravity, body->GetWorldCenter());
+    //body->ApplyForce(body->GetMass()*fruitGravity, body->GetWorldCenter());
+    
+}
+
+- (void)tick:(ccTime) dt {
+    
+    world->Step(dt, 10, 10);
+    for(b2Body *b = world->GetBodyList(); b; b=b->GetNext()) {    
+        if (b->GetUserData() != NULL) {
+            CCSprite *ballData = (CCSprite *)b->GetUserData();
+            ballData.position = ccp(b->GetPosition().x * PTM_RATIO,
+                                    b->GetPosition().y * PTM_RATIO);
+            ballData.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
+        }        
+    }
+    
 }
 /////PAT -- end
 
@@ -193,6 +251,9 @@ enum {
 {
 	[fruitSprites release];
     fruitSprites = nil;
+    
+    
+    world = NULL;
 
 	// don't forget to call "super dealloc"
 	[super dealloc];

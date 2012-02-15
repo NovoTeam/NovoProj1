@@ -26,5 +26,5 @@
 // returns a CCScene that contains the GameLevel as the only child
 +(CCScene *) scene;
 // adds a new sprite at a given coordinate
--(void) addGravityToSprite:(CCSprite *)sprite;
+-(void) addGravityToSprite: (CCSprite *)sprite;
 @end
