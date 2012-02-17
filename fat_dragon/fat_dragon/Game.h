@@ -27,4 +27,6 @@
 +(CCScene *) scene;
 // adds a new sprite at a given coordinate
 -(void) addGravityToSprite: (CCSprite *)sprite;
+-(void) removeGravityFromSprite:(CCSprite *)selectSprite;
+- (void) shakingAnimation: (CCSprite *)newSprite;
 @end

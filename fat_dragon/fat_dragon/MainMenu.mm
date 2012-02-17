@@ -9,6 +9,10 @@
 
 // Import the interfaces
 #import "MainMenu.h"
+
+//FOR TEST ONLY!
+#import "Game.h"
+
 #import "PlayGame.h"
 #import "Profile.h"
 #import "SimpleAudioEngine.h"
@@ -81,13 +85,20 @@ CCSprite *volume;
         CCMenuItemImage *play_game=[CCMenuItemImage itemFromNormalImage:@"play_button.png" selectedImage:@"play_button.png" target:self selector:@selector(playGame:)];
         play_game.position=ccp(0, -50);
 
+        /**
+         *Author: Xiang Guo
+         *        For development only, button go directly to animation
+         */
+        CCMenuItemImage *test_button=[CCMenuItemImage itemFromNormalImage:@"play_button.png" selectedImage:@"play_button.png" target:self selector:@selector(test:)];
+        test_button.position=ccp(0, 50);
+        /****/
         
         //right now having problem to quit game
         CCMenuItemImage *quit=[CCMenuItemImage itemFromNormalImage: @"quit_button.png" selectedImage:@"quit_button.png"];
         quit.position=ccp(160, -50);
         
         //adding all these menu button to a menu object
-        CCMenu *main_menu = [CCMenu menuWithItems: profile, play_game, quit, nil];
+        CCMenu *main_menu = [CCMenu menuWithItems: profile, play_game, quit, test_button, nil];
         
         //adding menu object to this class
         [self addChild:main_menu];
@@ -171,7 +182,14 @@ CCSprite *volume;
 }
 //END***************************************************
 
-
+//FOR_TEST_ONLY!!!*************************************************
+//Author: Xiang Guo
+//method for going into profile
+-(void) test:(id)sender
+{
+    [[CCDirector sharedDirector]replaceScene:[Game node]];
+}
+//END***************************************************
 - (void) dealloc
 {
 	// in case you have something to dealloc, do it in this method

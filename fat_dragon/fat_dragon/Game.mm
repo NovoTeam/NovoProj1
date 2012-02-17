@@ -63,7 +63,6 @@ enum {
     int maxY = winSize.height - target.contentSize.height/2;
     int rangeY = maxY - minY;
     int actualY = (arc4random() % rangeY) + minY;
-    
     // Create the target slightly off-screen along the right edge,
     // and along a random position along the Y axis as calculated above
     target.position = ccp(winSize.width + (target.contentSize.width/2), actualY);
@@ -93,9 +92,6 @@ enum {
         b2Vec2 fruitGravity = b2Vec2(0.0f, -5.0f);
         bool doSleep = false;
         world = new b2World(fruitGravity, doSleep);
-        
-        
-        
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565]; //uses less memory by loading a lower quality background
         //
         background = [CCSprite spriteWithFile:@"Icon 512x512.png"]; //load background
@@ -144,7 +140,6 @@ enum {
     for (CCSprite *sprite in movableSprites) 
     {
         if (CGRectContainsPoint(dragon, )) {
-            <#statements#>
         }
     }
 }*/
@@ -156,7 +151,54 @@ enum {
         selSprite.position = newPos;
     } 
 }
-
+//helper method that loops through all of the sprites in the movableSprites array, looking for the first sprite that the touch intersects
+- (CCSprite *) selectSpriteForTouch:(CGPoint)touchLocation {
+    CCSprite * fruitSelected = nil;
+    for (CCSprite *sprite in fruitSprites) 
+    {
+        //"sprite.boundingbox" returns the bounding box around the sprite. This is generally better to use than computing the rectangle yourself
+        if (CGRectContainsPoint(sprite.boundingBox, touchLocation)) {         
+            fruitSelected = sprite;
+            break;
+        }
+    }
+     return fruitSelected;
+}
+- (void) shakingAnimation: (CCSprite *)newSprite
+{
+    if (newSprite != selSprite&& newSprite!=nil) 
+    {
+        [selSprite stopAllActions]; //cancels any animation running on the previously selected sprite
+        [selSprite runAction:[CCRotateTo actionWithDuration:0.1 angle:0]];
+        CCRotateTo * rotLeft = [CCRotateBy actionWithDuration:0.1 angle:-4.0];
+        CCRotateTo * rotCenter = [CCRotateBy actionWithDuration:0.1 angle:0.0];
+        CCRotateTo * rotRight = [CCRotateBy actionWithDuration:0.1 angle:4.0];
+        CCSequence * rotSeq = [CCSequence actions:rotLeft, rotCenter, rotRight, rotCenter, nil];
+        [newSprite runAction:[CCRepeatForever actionWithAction:rotSeq]]; //make the sprite appear to “wiggle” back and forth
+        selSprite = newSprite;
+    }
+}
+-(void) removeGravityFromSprite:(CCSprite *)selectSprite
+{   
+    b2Body *body;
+    
+    //find body for selected sprite
+    for (body=world->GetBodyList(); body&&body->GetUserData()!=selectSprite; body=body->GetNext());
+    //remove body
+    world->DestroyBody(body);
+}
+- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event { 
+    //has to convert the touch location from UIView coordinates to layer (node space) coordinates
+    CCSprite *fruitSelected;
+    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
+    fruitSelected=[self selectSpriteForTouch:touchLocation];
+    if(fruitSelected!=nil)
+    {
+        [self shakingAnimation:fruitSelected];
+        [self removeGravityFromSprite: fruitSelected];
+    }
+    return TRUE;    
+}
 //the callback you get when the user drags their finger
 - (void) ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {       
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch]; //convert the touch to layer coordinates
@@ -170,38 +212,16 @@ enum {
     CGPoint translation = ccpSub(touchLocation, oldTouchLocation);    
     [self panForTranslation:translation];    
 }
-
-//helper method that loops through all of the sprites in the movableSprites array, looking for the first sprite that the touch intersects
-- (void) selectSpriteForTouch:(CGPoint)touchLocation {
-    CCSprite * newSprite = nil;
-    for (CCSprite *sprite in fruitSprites) 
+- (void) ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    CGPoint dropLocation = [self convertTouchToNodeSpace:touch]; //convert the touch to layer coordinates
+    CCSprite *dropSprite;
+    dropSprite=[self selectSpriteForTouch: dropLocation];
+    if(dropSprite!=nil)
     {
-        //"sprite.boundingbox" returns the bounding box around the sprite. This is generally better to use than computing the rectangle yourself
-        if (CGRectContainsPoint(sprite.boundingBox, touchLocation)) {         
-            newSprite = sprite;
-            break;
-        }
-    }    
-    if (newSprite != selSprite) 
-    {
-        [selSprite stopAllActions]; //cancels any animation running on the previously selected sprite
-        [selSprite runAction:[CCRotateTo actionWithDuration:0.1 angle:0]];
-        CCRotateTo * rotLeft = [CCRotateBy actionWithDuration:0.1 angle:-4.0];
-        CCRotateTo * rotCenter = [CCRotateBy actionWithDuration:0.1 angle:0.0];
-        CCRotateTo * rotRight = [CCRotateBy actionWithDuration:0.1 angle:4.0];
-        CCSequence * rotSeq = [CCSequence actions:rotLeft, rotCenter, rotRight, rotCenter, nil];
-        [newSprite runAction:[CCRepeatForever actionWithAction:rotSeq]]; //make the sprite appear to “wiggle” back and forth
-        selSprite = newSprite;
+        [self addGravityToSprite:dropSprite];
     }
 }
- 
-- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event { 
-    //has to convert the touch location from UIView coordinates to layer (node space) coordinates
-    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
-    [self selectSpriteForTouch:touchLocation];      
-    return TRUE;    
-}
-
 ///////PAT -- adding gravity to the sprite
 -(void) addGravityToSprite: (CCSprite *)sprite 
 {
@@ -214,7 +234,6 @@ enum {
     bodyDef.position.Set((sprite.position.x)/PTM_RATIO, (sprite.position.y)/PTM_RATIO);
     bodyDef.userData = sprite;
     b2Body *body = world->CreateBody(&bodyDef);
-    
     // Define another circle shape for our dynamic body.
     b2CircleShape circle;
     circle.m_radius = (sprite.contentSize.width/2)/PTM_RATIO;
@@ -226,7 +245,6 @@ enum {
     fruitDef.friction = 0.2f;
     fruitDef.restitution = 0.8f;
     body->CreateFixture(&fruitDef);
-    
     //body->ApplyForce(body->GetMass()*fruitGravity, body->GetWorldCenter());
     
 }
