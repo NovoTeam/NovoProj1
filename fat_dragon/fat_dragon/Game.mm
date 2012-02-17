@@ -153,16 +153,14 @@ enum {
 }
 //helper method that loops through all of the sprites in the movableSprites array, looking for the first sprite that the touch intersects
 - (CCSprite *) selectSpriteForTouch:(CGPoint)touchLocation {
-    CCSprite * fruitSelected = nil;
     for (CCSprite *sprite in fruitSprites) 
     {
         //"sprite.boundingbox" returns the bounding box around the sprite. This is generally better to use than computing the rectangle yourself
         if (CGRectContainsPoint(sprite.boundingBox, touchLocation)) {         
-            fruitSelected = sprite;
-            break;
+            return sprite;
         }
     }
-     return fruitSelected;
+    return nil;
 }
 - (void) shakingAnimation: (CCSprite *)newSprite
 {
@@ -185,7 +183,9 @@ enum {
     //find body for selected sprite
     for (body=world->GetBodyList(); body&&body->GetUserData()!=selectSprite; body=body->GetNext());
     //remove body
-    world->DestroyBody(body);
+    if (body) {
+        world->DestroyBody(body);
+    }
 }
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event { 
     //has to convert the touch location from UIView coordinates to layer (node space) coordinates
@@ -203,6 +203,9 @@ enum {
 - (void) ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {       
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch]; //convert the touch to layer coordinates
     
+    //Xiang Guo: This could have potential problem. but it is very efficient!!!!! That's why I leave it there!!!!
+    selSprite.position=touchLocation;
+    /*
     //get the information about the previous touch as well. no helper method to convert these, so have to do the steps to convert the touch coordinates manually
     CGPoint oldTouchLocation = [touch previousLocationInView:touch.view];
     oldTouchLocation = [[CCDirector sharedDirector] convertToGL:oldTouchLocation];
@@ -211,6 +214,7 @@ enum {
     //figures out the amount the touch moved by subtracting the current location from the last location
     CGPoint translation = ccpSub(touchLocation, oldTouchLocation);    
     [self panForTranslation:translation];    
+     */
 }
 - (void) ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event
 {
